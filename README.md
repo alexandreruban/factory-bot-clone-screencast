@@ -1,39 +1,63 @@
-# TinyFactory
+# Rebuilding `FactoryBot` screencast
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/tiny_factory`. To experiment with that code, run `bin/console` for an interactive prompt.
+In this screencast, we will build a `FactoryBot` clone. It won't have all the features, but it will look like early versions of `FactoryBot`!
 
-TODO: Delete this and the text above, and describe your gem
+The purpose of this screencast is to learn about:
 
-## Installation
+- How to create a Ruby gem
+- How to use Ruby `blocks` and `procs`
+- How to use Ruby `instance_eval` and `method_missing` methods
 
-Add this line to your application's Gemfile:
+## What we will build
 
-```ruby
-gem 'tiny_factory'
+In this video, we will build a `TinyFactory` gem that will pass those tests:
+
+```rb
+class TestTinyFactory < Minitest::Test
+  def setup
+    TinyFactory.define :user do
+      first_name { "Alexandre" }
+      last_name { "Ruban" }
+      email { "#{first_name}.#{last_name}@email.com".downcase }
+    end
+  end
+
+  def test_attributes_for
+    attributes = attributes_for :user
+
+    assert_equal "Alexandre", attributes[:first_name]
+    assert_equal "Ruban", attributes[:last_name]
+    assert_equal "alexandre.ruban@email.com", attributes[:email]
+
+    assert_kind_of Hash, attributes
+  end
+
+  def test_build
+    user = build :user
+
+    assert_equal "Alexandre", user.first_name
+    assert_equal "Ruban", user.last_name
+    assert_equal "alexandre.ruban@email.com", user.email
+
+    assert_kind_of User, user
+    assert user.new_record?
+  end
+
+  def test_create
+    user = create :user
+
+    assert_equal "Alexandre", user.first_name
+    assert_equal "Ruban", user.last_name
+    assert_equal "alexandre.ruban@email.com", user.email
+
+    assert_kind_of User, user
+    assert user.persisted?
+  end
+end
 ```
 
-And then execute:
+## Credits
 
-    $ bundle install
+This tutorial is inspired by the [factory_bot][] open-source gem developed by Thoughtbot. Check the code to see how the real `factory_bot` works!
 
-Or install it yourself as:
-
-    $ gem install tiny_factory
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/tiny_factory.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+[factory_bot]: https://github.com/thoughtbot/factory_bot
