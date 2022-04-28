@@ -23,3 +23,7 @@ CreateUser.suppress_messages do
 end
 
 class User < ActiveRecord::Base; end
+
+class Minitest::Test
+  include TinyFactory::Syntax::Methods
+end

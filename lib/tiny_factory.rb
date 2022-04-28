@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "tiny_factory/syntax/methods"
+require "tiny_factory/strategy/attributes_for"
 require "tiny_factory/attribute"
 require "tiny_factory/factory"
 
@@ -19,5 +21,13 @@ module TinyFactory
     factory.instance_eval(&block)
     register_factory(factory)
     factory
+  end
+
+  def self.attributes_for(name)
+    find_factory(name).run(Strategy::AttributesFor)
+  end
+
+  def self.find_factory(name)
+    factories.find { |factory| factory.name == name }
   end
 end
