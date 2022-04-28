@@ -1,20 +1,20 @@
 module TinyFactory
   module Strategy
-    class AttributesFor
-      def initialize(*)
-        @result = {}
+    class Build
+      def initialize(klass)
+        @instance = klass.new
       end
 
       def get(attribute)
-        @result[attribute]
+        @instance.send(attribute)
       end
 
       def set(attribute, value)
-        @result[attribute] = value
+        @instance.send("#{attribute}=", value)
       end
 
       def result
-        @result
+        @instance
       end
 
       def method_missing(name)

@@ -2,6 +2,7 @@
 
 require "tiny_factory/syntax/methods"
 require "tiny_factory/strategy/attributes_for"
+require "tiny_factory/strategy/build"
 require "tiny_factory/attribute"
 require "tiny_factory/factory"
 
@@ -25,6 +26,10 @@ module TinyFactory
 
   def self.attributes_for(name)
     find_factory(name).run(Strategy::AttributesFor)
+  end
+
+  def self.build(name)
+    find_factory(name).run(Strategy::Build)
   end
 
   def self.find_factory(name)
