@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "tiny_factory/version"
+require "tiny_factory/attribute"
+require "tiny_factory/factory"
 
 module TinyFactory
-  class Error < StandardError; end
-  # Your code goes here...
+  def self.define(name, &block)
+    factory = Factory.new(name)
+    factory.instance_eval(&block)
+    factory
+  end
 end
